@@ -21,6 +21,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
@@ -42,7 +43,21 @@ public class GeneratedImageActivity extends AppCompatActivity {
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra("image_url")) {
             String imageUrl = intent.getStringExtra("image_url");
-            Picasso.get().load(imageUrl).into(imageView);
+
+            Picasso.get().load(imageUrl)
+                    .into(imageView, new Callback() {
+                        @Override
+                        public void onSuccess() {
+                            // Handle success
+                            Toast.makeText(GeneratedImageActivity.this, "Image downloaded successfully", Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onError(Exception e) {
+                            // Handle error
+                            Toast.makeText(GeneratedImageActivity.this, "Error downloading the image", Toast.LENGTH_SHORT).show();
+                        }
+                    });
         }
 
         // Handle save button click
@@ -77,7 +92,10 @@ public class GeneratedImageActivity extends AppCompatActivity {
                     requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                             WRITE_PERMISSION_CODE);
                 }
-            }
+
+        alert.dismiss();  // Dismiss the AlertDialog here
+        }
+
         });
 
         negativeButton.setOnClickListener(new View.OnClickListener() {
