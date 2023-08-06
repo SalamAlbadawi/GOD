@@ -4,7 +4,7 @@
 
     <string name="save_image">Save Image</string>
     <string name="back">Back</string>
-    <string name="show_saved_images">Show Saved Images</string>
+    <string name="show_saved_images">Show Images</string>
     <string name="image_description">image</string>
 
 </resources>
