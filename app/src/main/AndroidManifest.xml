@@ -26,6 +26,10 @@
             <!-- Inside AndroidManifest.xml -->
         </activity>
             <activity android:name=".GeneratedImageActivity" />
+        <activity
+            android:name=".SavedImagesActivity"
+            android:label="Saved Images"
+            android:parentActivityName=".GeneratedImageActivity" />
 
 
     </application>

@@ -143,5 +143,15 @@ public class GeneratedImageActivity extends AppCompatActivity {
             Toast.makeText(this, "Error saving the image", Toast.LENGTH_SHORT).show();
         }
 
-    }
+    Button showListButton = findViewById(R.id.showListButton);
+
+        showListButton.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Intent intent = new Intent(GeneratedImageActivity.this, SavedImagesActivity.class);
+            startActivity(intent);
+        }
+
+    });
+}
 }

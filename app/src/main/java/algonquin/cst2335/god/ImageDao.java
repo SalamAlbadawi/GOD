@@ -27,6 +27,8 @@ public interface ImageDao {
     @Query("SELECT * FROM images")
     List<ImageEntity> getAllImages();
 
+
+
     @Query("SELECT * FROM images WHERE url = :url")
     ImageEntity findByUrl(String url);
 
