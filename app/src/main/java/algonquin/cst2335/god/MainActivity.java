@@ -1,5 +1,6 @@
 package algonquin.cst2335.god;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
@@ -44,22 +45,18 @@ public class MainActivity extends AppCompatActivity {
         btnShowSavedImages = findViewById(R.id.btnShowSavedImages);
         imageDisplay = findViewById(R.id.imageDisplay);
 
-        // Add input validation for positive whole numbers
         etWidth.setFilters(new InputFilter[]{new PositiveWholeNumberInputFilter()});
         etHeight.setFilters(new InputFilter[]{new PositiveWholeNumberInputFilter()});
 
-        // Add text change listeners to validate input while typing
         etWidth.addTextChangedListener(new PositiveWholeNumberTextWatcher(etWidth));
         etHeight.addTextChangedListener(new PositiveWholeNumberTextWatcher(etHeight));
 
-        // Restore user's previous input from SharedPreferences
         int savedWidth = preferences.getInt(KEY_WIDTH, 0);
         int savedHeight = preferences.getInt(KEY_HEIGHT, 0);
 
         etWidth.setText(String.valueOf(savedWidth));
         etHeight.setText(String.valueOf(savedHeight));
 
-        // Add click listener for the Generate Image button
         btnGenerate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -67,7 +64,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // Add click listener for the Show Saved Images button
         btnShowSavedImages.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,7 +76,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
 
-        // Save user's input to SharedPreferences when the app is paused
         String widthInput = etWidth.getText().toString();
         String heightInput = etHeight.getText().toString();
 
@@ -105,46 +100,28 @@ public class MainActivity extends AppCompatActivity {
         int width = Integer.parseInt(widthInput);
         int height = Integer.parseInt(heightInput);
 
-        // Implement image generation logic here using the given width and height
-        // For example, you can create a Bitmap or load an image into the ImageView.
-        // For demonstration purposes, let's set a placeholder image.
-
-        imageDisplay.setImageResource(R.drawable.icon1);
+        navigateToGeneratedImageActivity(width, height);
     }
 
     private void showSavedImages() {
-        // Implement logic to show the list of saved images here (if applicable).
         Toast.makeText(this, "Showing saved images...", Toast.LENGTH_SHORT).show();
     }
 
-    // InputFilter to allow only positive whole numbers
     private static class PositiveWholeNumberInputFilter implements InputFilter {
         @Override
         public CharSequence filter(CharSequence source, int start, int end,
                                    Spanned dest, int dstart, int dend) {
-            if (TextUtils.isEmpty(source)) {
-                return null; // Allow empty input
-            }
-
-            String input = dest.subSequence(0, dstart) + source.toString() + dest.subSequence(dend, dest.length());
-            if (input.matches("0") || input.matches("-0")) {
-                return ""; // Prevent leading zero
-            }
-
-            try {
-                int value = Integer.parseInt(input);
-                if (value < 0) {
-                    return ""; // Prevent negative numbers
+            StringBuilder filteredStringBuilder = new StringBuilder();
+            for (int i = start; i < end; i++) {
+                char currentChar = source.charAt(i);
+                if (Character.isDigit(currentChar)) {
+                    filteredStringBuilder.append(currentChar);
                 }
-            } catch (NumberFormatException e) {
-                return ""; // Prevent non-numeric input
             }
-
-            return null; // Accept the input
+            return filteredStringBuilder.toString();
         }
     }
 
-    // TextWatcher to validate input while typing
     private static class PositiveWholeNumberTextWatcher implements TextWatcher {
         private EditText editText;
 
@@ -165,16 +142,24 @@ public class MainActivity extends AppCompatActivity {
             String input = s.toString();
             if (input.matches("0") || input.matches("-0")) {
                 s.clear(); // Clear leading zero
-            }
-
-            try {
-                int value = Integer.parseInt(input);
-                if (value < 0) {
-                    s.clear(); // Clear negative numbers
+            } else {
+                try {
+                    int value = Integer.parseInt(input);
+                    if (value < 0) {
+                        s.clear(); // Clear negative numbers
+                    }
+                } catch (NumberFormatException e) {
+                    s.clear(); // Clear non-numeric input
                 }
-            } catch (NumberFormatException e) {
-                s.clear(); // Clear non-numeric input
             }
         }
+    }
+
+    private void navigateToGeneratedImageActivity(int width, int height) {
+        String imageUrl = "https://placebear.com/" + width + "/" + height;
+
+        Intent intent = new Intent(MainActivity.this, GeneratedImageActivity.class);
+        intent.putExtra("image_url", imageUrl);
+        startActivity(intent);
     }
 }
