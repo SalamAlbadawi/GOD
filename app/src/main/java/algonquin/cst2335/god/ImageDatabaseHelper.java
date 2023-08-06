@@ -36,16 +36,14 @@ public class ImageDatabaseHelper extends SQLiteOpenHelper {
     // Insert Image Details into the database
     public long insertImageDetails(String url, int width, int height) {
         SQLiteDatabase db = this.getWritableDatabase();
-
         ContentValues values = new ContentValues();
-        values.put("URL", url);
-        values.put("Width", width);
-        values.put("Height", height);
+        values.put("url", url);
+        values.put("width", width);
+        values.put("height", height);
 
-        long id = db.insert(TABLE_NAME, null, values);
-        db.close();
-        return id;
+        return db.insert("images", null, values); // Assuming 'images' is your table name
     }
+
 
     // Query all Image Details
     public Cursor getAllImages() {

@@ -33,6 +33,7 @@ public class GeneratedImageActivity extends AppCompatActivity {
     private String imageUrl; // Declare imageUrl at class level
     private ImageDatabaseHelper dbHelper; // Declare dbHelper
     private static final int WRITE_PERMISSION_CODE = 101;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,25 +44,22 @@ public class GeneratedImageActivity extends AppCompatActivity {
         // Retrieve the image URL from the intent extra
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra("image_url")) {
-            String imageUrl = intent.getStringExtra("image_url");
+            imageUrl = intent.getStringExtra("image_url"); // Use the class level variable
 
             Picasso.get().load(imageUrl)
                     .into(imageView, new Callback() {
                         @Override
                         public void onSuccess() {
-                            // Handle success
                             Toast.makeText(GeneratedImageActivity.this, "Image downloaded successfully", Toast.LENGTH_SHORT).show();
                         }
 
                         @Override
                         public void onError(Exception e) {
-                            // Handle error
                             Toast.makeText(GeneratedImageActivity.this, "Error downloading the image", Toast.LENGTH_SHORT).show();
                         }
                     });
         }
 
-        // Handle save button click
         Button saveButton = findViewById(R.id.saveButton);
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -144,6 +142,6 @@ public class GeneratedImageActivity extends AppCompatActivity {
             e.printStackTrace();
             Toast.makeText(this, "Error saving the image", Toast.LENGTH_SHORT).show();
         }
-    }
 
+    }
 }
