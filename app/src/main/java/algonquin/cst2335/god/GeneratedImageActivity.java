@@ -42,8 +42,6 @@ public class GeneratedImageActivity extends AppCompatActivity {
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra("image_url")) {
             String imageUrl = intent.getStringExtra("image_url");
-
-            // Load the image into the ImageView using Picasso
             Picasso.get().load(imageUrl).into(imageView);
         }
 
@@ -67,6 +65,8 @@ public class GeneratedImageActivity extends AppCompatActivity {
         Button positiveButton = dialogView.findViewById(R.id.positiveButton);
         Button negativeButton = dialogView.findViewById(R.id.negativeButton);
 
+        final AlertDialog alert = builder.create();
+
         positiveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -83,16 +83,16 @@ public class GeneratedImageActivity extends AppCompatActivity {
         negativeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // User cancelled the save action, close the dialog
+                alert.dismiss();  // Dismiss the AlertDialog
             }
         });
 
-        AlertDialog alert = builder.create();
         alert.show();
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == WRITE_PERMISSION_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 saveImageToGallery();
