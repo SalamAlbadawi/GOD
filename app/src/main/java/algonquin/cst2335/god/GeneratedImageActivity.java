@@ -30,13 +30,14 @@ import java.io.OutputStream;
 public class GeneratedImageActivity extends AppCompatActivity {
 
     private ImageView imageView;
+    private String imageUrl; // Declare imageUrl at class level
+    private ImageDatabaseHelper dbHelper; // Declare dbHelper
     private static final int WRITE_PERMISSION_CODE = 101;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_generated_image);
-
+        dbHelper = new ImageDatabaseHelper(this);
         imageView = findViewById(R.id.imageView);
 
         // Retrieve the image URL from the intent extra
@@ -93,8 +94,8 @@ public class GeneratedImageActivity extends AppCompatActivity {
                             WRITE_PERMISSION_CODE);
                 }
 
-        alert.dismiss();  // Dismiss the AlertDialog here
-        }
+                alert.dismiss();  // Dismiss the AlertDialog here
+            }
 
         });
 
@@ -120,6 +121,7 @@ public class GeneratedImageActivity extends AppCompatActivity {
         }
     }
 
+
     private void saveImageToGallery() {
         BitmapDrawable drawable = (BitmapDrawable) imageView.getDrawable();
         Bitmap bitmap = drawable.getBitmap();
@@ -133,10 +135,15 @@ public class GeneratedImageActivity extends AppCompatActivity {
 
         try (OutputStream outputStream = getContentResolver().openOutputStream(uri)) {
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+
+            // After saving the image, save its details to the database
+            dbHelper.insertImageDetails(imageUrl, bitmap.getWidth(), bitmap.getHeight());
+
             Toast.makeText(this, "Image Saved", Toast.LENGTH_SHORT).show();
         } catch (IOException e) {
             e.printStackTrace();
             Toast.makeText(this, "Error saving the image", Toast.LENGTH_SHORT).show();
         }
     }
+
 }
