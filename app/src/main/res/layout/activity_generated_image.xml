@@ -14,12 +14,12 @@
         android:layout_centerInParent="true"
         android:contentDescription="@string/image_description" />
 
+
     <Button
-        android:id="@+id/btnSaveImage"
-        android:layout_width="162dp"
+        android:id="@+id/saveButton"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:text="@string/save_image" />
+        android:text="Save Image" />
 
     <Button
         android:id="@+id/btnBack"
@@ -27,10 +27,10 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginStart="-45dp"
+        android:layout_marginStart="38dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="25dp"
-        android:layout_toEndOf="@id/btnSaveImage"
+        android:layout_marginBottom="39dp"
+        android:layout_toEndOf="@id/saveButton"
         android:text="@string/back" />
 
     <Button
